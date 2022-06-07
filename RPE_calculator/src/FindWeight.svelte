@@ -1,8 +1,8 @@
 <script lang="ts">
-  let weight;
+  let max=210;
   let reps;
+  let weight;
   let RPE=9;
-  let max: number=0;
 
   let RPE_grid=[
     [100.,95.5,92.2,89.2,86.3,83.7,81.1,78.6,76.2,73.9,70.7,68.0],
@@ -17,19 +17,14 @@
     [0,0,0,0,0,0,0,0,0,0,0,0]
   ]
 
-  $:{
-    max=(weight)/(RPE_grid[RPE][reps-1]/100);
-    max=max.toFixed(1);
-  };
+  $: {
+    weight=max*(RPE_grid[RPE][reps-1]/100);
+    weight=weight.toFixed(1);
+  }
 
 </script>
 
-
-<div class="flex flex-col justify-center items-center">
-    <div class="flex flex-row py-2 w-3/4 justify-center">
-      <h1 class="w-1/2 text-2xl text-left">Enter Weight:</h1>
-      <input class="text-center text-2xl w-1/4 rounded-xl" type="number" bind:value={weight}/>
-    </div>
+<div class="flex flex-col my-8 items-center">
     <div class="flex flex-row py-2 w-3/4 justify-center">
       <h1 class="w-1/2 text-2xl text-left">Enter Reps:</h1>
       <input class="text-center text-2xl w-1/4 rounded-xl" type="number" bind:value={reps}/>
@@ -48,11 +43,9 @@
           <option value=0>10</option>
       </select>
     </div>
-  <h1 class="text-3xl"> Predicted Max:</h1>
-  {#if !isNaN(max) && isFinite(max)}
-    <h1 class="text-2xl"> {max} kg</h1>
-  {/if}
-</div>
+  <h1 class="text-3xl">Weight:</h1>
+    <h1 class="text-2xl"> {weight} kg</h1>
+  </div>
 
 <style>
   input { @apply text-sky-500 }
