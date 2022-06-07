@@ -1,31 +1,21 @@
 <script lang="ts">
-  let weight;
-  let reps;
-  let RPE=9;
-  let max: number=0;
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
 
-  let RPE_grid=[
-    [100.,95.5,92.2,89.2,86.3,83.7,81.1,78.6,76.2,73.9,70.7,68.0],
-    [97.8,93.9,90.7,87.8,85.0,82.4,79.9,77.4,75.1,72.3,69.4,66.7],
-    [95.5,92.2,89.2,86.3,83.7,81.1,78.6,76.2,73.9,70.7,68.0,65.3],
-    [93.9,90.7,87.8,85.0,82.4,79.9,77.4,75.1,72.3,69.4,66.7,64.0],
-    [92.2,89.2,86.3,83.7,81.1,78.6,76.2,73.9,70.7,68.0,65.3,62.6],
-    [90.7,87.8,85.0,82.4,79.9,77.4,75.1,72.3,69.4,66.7,64.0,61.3],
-    [89.2,86.3,83.7,81.1,78.6,76.2,73.9,70.7,68.0,65.3,62.6,59.9],
-    [87.8,85.0,82.4,79.9,77.4,75.1,72.3,69.4,66.7,64.0,61.3,58.8],
-    [86.3,83.7,81.1,78.6,76.2,73.9,70.7,68.0,65.3,62.6,59.6,57.2],
-    [0,0,0,0,0,0,0,0,0,0,0,0]
-  ]
+  let weight=100;
+  let reps=12;
+  let RPE=8;
+  export let max;
 
   $:{
-    max=(weight)/(RPE_grid[RPE][reps-1]/100);
-    max=max.toFixed(1);
+    dispatch("calculatemax",{weight,reps,RPE});
+    dispatch("calculateweight",{reps,RPE});
   };
-
 </script>
 
 
 <div class="flex flex-col justify-center items-center">
+  <h1 class="text-3xl py-4">Predicted Max:</h1>
     <div class="flex flex-row py-2 w-3/4 justify-center">
       <h1 class="w-1/2 text-2xl text-left">Enter Weight:</h1>
       <input class="text-center text-2xl w-1/4 rounded-xl" type="number" bind:value={weight}/>
@@ -48,10 +38,13 @@
           <option value=0>10</option>
       </select>
     </div>
-  <h1 class="text-3xl"> Predicted Max:</h1>
+    <h1 class="text-3xl bg-sky-700 rounded-xl p-6 my-8">
   {#if !isNaN(max) && isFinite(max)}
-    <h1 class="text-2xl"> {max} kg</h1>
+    Max: {max} kg
+  {:else}
+    Enter values
   {/if}
+    </h1>
 </div>
 
 <style>
